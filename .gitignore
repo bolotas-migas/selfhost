@@ -7,8 +7,6 @@ secrets/
 secrets.tar
 secrets.tar.age.decrypted
 
-# Stale/deprecated
-ddclient/
 
 # Logs
 *.log
