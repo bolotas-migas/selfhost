@@ -1,32 +1,8 @@
 #!/bin/bash
-# Decrypt and deploy secrets
 set -euo pipefail
-
 cd "$(dirname "$0")"
-
-AGE_KEY="$HOME/.age-key.txt"
-if [ ! -f "$AGE_KEY" ]; then
-    echo "ERROR: Age key not found at $AGE_KEY"
-    echo "Copy it from your backup or original machine"
-    exit 1
-fi
-
-if [ ! -f secrets.tar.age ]; then
-    echo "ERROR: secrets.tar.age not found"
-    exit 1
-fi
-
-echo "Decrypting secrets..."
-age -d -i "$AGE_KEY" secrets.tar.age | tar xzf -
-
-echo "Creating .env symlinks for Docker Compose..."
+[ -f ~/.age-key.txt ] || { echo "ERROR: ~/.age-key.txt not found"; exit 1; }
+[ -f secrets.tar.age ] || { echo "ERROR: secrets.tar.age not found"; exit 1; }
+age -d -i ~/.age-key.txt secrets.tar.age | tar xzf -
 ln -sf env immich/.env
-
-echo ""
-echo "✓ Secrets decrypted to:"
-echo "  - caddy/env"
-echo "  - ddns/env"
-echo "  - immich/env"
-echo "  - immich/.env -> env (symlink for Docker Compose)"
-echo ""
-echo "Deploy services with docker compose or service scripts"
+echo "Secrets decrypted: caddy/env ddns/env immich/env"
