@@ -64,7 +64,7 @@ Managed via Gandi API:
 ├── selfhost/           # Production services
 │   ├── caddy/
 │   │   ├── Caddyfile.production
-│   │   ├── docker-compose.production.yml
+│   │   ├── docker-compose.yml
 │   │   ├── Dockerfile
 │   │   └── env         # Decrypted by deploy.sh (NOT in git)
 │   ├── ddns/
