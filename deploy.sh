@@ -19,10 +19,14 @@ fi
 echo "Decrypting secrets..."
 age -d -i "$AGE_KEY" secrets.tar.age | tar xzf -
 
+echo "Creating .env symlinks for Docker Compose..."
+ln -sf env immich/.env
+
 echo ""
 echo "✓ Secrets decrypted to:"
 echo "  - caddy/env"
 echo "  - ddns/env"
 echo "  - immich/env"
+echo "  - immich/.env -> env (symlink for Docker Compose)"
 echo ""
 echo "Deploy services with docker compose or service scripts"
