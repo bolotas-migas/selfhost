@@ -36,6 +36,7 @@ services:
   redis:
     container_name: immich_redis
     image: docker.io/valkey/valkey:9
+    command: valkey-server --maxmemory 128mb --maxmemory-policy allkeys-lru
     healthcheck:
       test: redis-cli ping || exit 1
     restart: unless-stopped
@@ -50,7 +51,7 @@ services:
       POSTGRES_INITDB_ARGS: '--data-checksums'
     volumes:
       - ${DB_DATA_LOCATION}:/var/lib/postgresql/data
-    shm_size: 128mb
+    shm_size: 1024mb
     restart: unless-stopped
     healthcheck:
       disable: false
