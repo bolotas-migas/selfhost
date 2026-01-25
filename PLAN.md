@@ -1,7 +1,7 @@
 # Self-Hosted Infrastructure Plan
 
 **Domain**: mfilipe.eu (Gandi)  
-**Server**: hopper (192.168.1.15, Ryzen 5 8500G, ZFS RAID10)  
+**Server**: hopper (192.168.x.x, Ryzen 5 8500G, ZFS RAID10)  
 **Goal**: Self-hosted services with HTTPS, security, easy deployment
 
 ---
@@ -77,7 +77,8 @@ simple/backups         → /media/simple/backups (compression=zstd)
 ## TODO
 
 - [ ] Caddy metrics → VictoriaMetrics
-- [ ] Immich hardware transcoding (VAAPI working on host, failing in container - using CPU fallback)
+- [ ] Immich hardware transcoding (VAAPI doesn't work in container, CPU fallback acceptable)
+- [ ] Consider migrating Caddy from Docker to native binary (xcaddy with Gandi plugin)
+- [ ] Deploy repo from local dev to `/srv/selfhost/` on hopper
+- [ ] Setup wife's Immich account + partner sharing
 - [ ] Expose Grafana (VPN-only or OAuth)
-- [ ] Backup automation docs
-- [ ] Move repo to github.com/msf/selfhost (separate from configs)
