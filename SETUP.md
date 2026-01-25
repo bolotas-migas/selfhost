@@ -1,6 +1,11 @@
 # Setup Documentation
 
-**Status**: tv.mfilipe.eu (Jellyfin) and img.mfilipe.eu (Immich) running with HTTPS, fail2ban active, DDNS updating both A/AAAA records
+**Status**: Production deployment active at `/srv/selfhost/` on hopper
+- tv.mfilipe.eu (Jellyfin) ✅
+- img.mfilipe.eu (Immich) ✅  
+- HTTPS with wildcard cert ✅
+- Fail2ban active ✅
+- DDNS updating A/AAAA records every 10min ✅
 
 ---
 
@@ -117,14 +122,14 @@ git add secrets.tar.age && git commit -m "update secrets"
 
 ## Deployment
 
-**Initial deploy**:
+**Initial deploy** (✅ COMPLETED):
 ```bash
 # On hopper
 sudo mv /srv/selfhost /srv/selfhost.old
 git clone git@github.com:msf/selfhost.git /srv/selfhost
 cd /srv/selfhost
 ./deploy.sh  # Decrypt secrets
-# Restart services (see each service dir for instructions)
+# Start services (see below)
 ```
 
 **Update config**:

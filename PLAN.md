@@ -79,6 +79,13 @@ simple/backups         → /media/simple/backups (compression=zstd)
 - [ ] Caddy metrics → VictoriaMetrics
 - [ ] Immich hardware transcoding (VAAPI doesn't work in container, CPU fallback acceptable)
 - [ ] Consider migrating Caddy from Docker to native binary (xcaddy with Gandi plugin)
-- [ ] Deploy repo from local dev to `/srv/selfhost/` on hopper
 - [ ] Setup wife's Immich account + partner sharing
 - [ ] Expose Grafana (VPN-only or OAuth)
+
+## Deployment Status
+
+✅ **Repo deployed to `/srv/selfhost/` on hopper**
+- All services running from github.com/msf/selfhost
+- Secrets decrypted and deployed
+- Docker Compose using standard filenames (docker-compose.yml)
+- DDNS systemd timer active
