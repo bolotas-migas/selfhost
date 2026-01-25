@@ -7,6 +7,8 @@ secrets/
 secrets.tar
 secrets.tar.age.decrypted
 
+# binary
+ddns/ddns
 
 # Logs
 *.log
