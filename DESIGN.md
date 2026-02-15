@@ -17,7 +17,7 @@ Internet:443 → Router → hopper:443 → Caddy (Docker)
                                       └→ img.mfilipe.eu → Immich:2283 (docker compose)
 
 LAN only:
-  192.168.1.15:18789 → OpenClaw (docker compose, no internet exposure)
+  192.168.1.15:18789 → OpenClaw (systemd-nspawn, isolated network + NAT outbound)
 ```
 
 ## Security Layers
@@ -32,16 +32,17 @@ LAN only:
 | Caddy | *.mfilipe.eu | Docker | nobody:adm |
 | Jellyfin | tv.mfilipe.eu | systemd | jellyfin |
 | Immich | img.mfilipe.eu | Docker Compose | 1000:1000 |
-| OpenClaw | 192.168.1.15:18789 | Docker Compose | node (1000) |
+| OpenClaw | LAN:18789 | systemd-nspawn | nspawn (isolated) |
 | DDNS | - | systemd timer | nobody:nogroup |
 | fail2ban | - | systemd | root |
 
 ## Storage Layout
 ```
-/srv/selfhost/          # Repo root
-/srv/logs/caddy/        # JSON access logs (nobody:adm)
-/media/simple/immich/   # ZFS dataset (compression=off)
-/media/simple/videos/   # Jellyfin media
+/srv/selfhost/                  # Repo root
+/srv/logs/caddy/                # JSON access logs (nobody:adm)
+/media/simple/immich/           # ZFS dataset (compression=off)
+/media/simple/videos/           # Jellyfin media
+/media/ssd/VMs/openclaw/        # ZFS dataset (quota=10G), nspawn rootfs
 ```
 
 ## Secrets Management
@@ -55,3 +56,4 @@ LAN only:
 - **Wildcard cert**: Single Let's Encrypt cert for all subdomains
 - **ZFS compression off for media**: Already compressed (photos/video)
 - **ZFS compression on for DB**: Postgres benefits from zstd-fast
+- **nspawn for OpenClaw**: Full persistent VM-like container on ZFS, resource-limited (1 CPU, 1.5GB RAM), isolated network with NAT outbound
