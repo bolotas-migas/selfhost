@@ -9,6 +9,7 @@ cd /srv/selfhost
 ./deploy.sh
 cd caddy && docker compose up -d
 cd ../immich && docker compose up -d
+cd ../openclaw && docker compose up -d
 cd ../fail2ban && ./install.sh
 systemctl restart jellyfin ddns.timer
 ```

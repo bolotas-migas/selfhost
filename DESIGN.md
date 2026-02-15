@@ -15,6 +15,9 @@ Self-hosted services on hopper (mfilipe.eu) with HTTPS, security, minimal mainte
 Internet:443 → Router → hopper:443 → Caddy (Docker)
                                       ├→ tv.mfilipe.eu  → Jellyfin:8096 (systemd)
                                       └→ img.mfilipe.eu → Immich:2283 (docker compose)
+
+LAN only:
+  192.168.1.15:18789 → OpenClaw (docker compose, no internet exposure)
 ```
 
 ## Security Layers
@@ -29,6 +32,7 @@ Internet:443 → Router → hopper:443 → Caddy (Docker)
 | Caddy | *.mfilipe.eu | Docker | nobody:adm |
 | Jellyfin | tv.mfilipe.eu | systemd | jellyfin |
 | Immich | img.mfilipe.eu | Docker Compose | 1000:1000 |
+| OpenClaw | 192.168.1.15:18789 | Docker Compose | node (1000) |
 | DDNS | - | systemd timer | nobody:nogroup |
 | fail2ban | - | systemd | root |
 

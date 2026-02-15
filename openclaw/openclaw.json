@@ -1,0 +1,80 @@
+{
+  // OpenClaw gateway config - cost-optimized for personal assistant use
+  // Model pricing (Anthropic, per 1M tokens):
+  //   Haiku 3.5:  $0.80 / $4.00   (heartbeats)
+  //   Haiku 4.5:  $1.00 / $5.00   (sub-agents, fallback)
+  //   Sonnet 4.5: $3.00 / $15.00  (main work)
+
+  gateway: {
+    mode: "local",
+    bind: "0.0.0.0",
+    port: 18789,
+    token: "${OPENCLAW_GATEWAY_TOKEN}",
+  },
+
+  providers: {
+    anthropic: {
+      apiKey: "${ANTHROPIC_API_KEY}",
+    },
+  },
+
+  agents: {
+    defaults: {
+      name: "assistant",
+      userTimezone: "Europe/Lisbon",
+      workspace: "/home/node/.openclaw/workspace",
+
+      model: {
+        primary: "anthropic/claude-sonnet-4-5",
+        fallbacks: ["anthropic/claude-haiku-4-5"],
+      },
+      models: {
+        "anthropic/claude-sonnet-4-5": { alias: "sonnet" },
+        "anthropic/claude-haiku-4-5": { alias: "haiku" },
+        "anthropic/claude-3-5-haiku": { alias: "haiku35" },
+      },
+
+      // Haiku 3.5 for heartbeats - cheapest model
+      heartbeat: {
+        every: "2h",
+        model: "anthropic/claude-3-5-haiku",
+        target: "none",
+        activeHours: {
+          start: "10:00",
+          end: "24:00",
+        },
+      },
+
+      subagents: {
+        model: "anthropic/claude-haiku-4-5",
+        maxConcurrent: 2,
+      },
+
+      // Compaction to keep context windows small
+      compaction: {
+        mode: "safeguard",
+        reserveTokensFloor: 16000,
+      },
+
+      contextPruning: {
+        mode: "cache-ttl",
+        ttl: "30m",
+        keepLastAssistants: 3,
+      },
+
+      thinkingDefault: "low",
+    },
+  },
+
+  session: {
+    reset: {
+      mode: "idle",
+      idleMinutes: 120,
+    },
+  },
+
+  tools: {
+    profile: "coding",
+    deny: ["browser", "canvas", "nodes", "cron"],
+  },
+}
