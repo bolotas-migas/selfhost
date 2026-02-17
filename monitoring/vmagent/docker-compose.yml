@@ -1,0 +1,15 @@
+services:
+  vmagent:
+    container_name: vmagent
+    image: victoriametrics/vmagent:v1.99.0
+    restart: unless-stopped
+    network_mode: host
+    volumes:
+      - vmagentdata:/vmagentdata
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml:ro
+    command:
+      - "--promscrape.config=/etc/prometheus/prometheus.yml"
+      - "--remoteWrite.url=http://localhost:8428/api/v1/write"
+
+volumes:
+  vmagentdata:

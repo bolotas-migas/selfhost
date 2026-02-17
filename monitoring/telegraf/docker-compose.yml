@@ -1,0 +1,21 @@
+services:
+  telegraf:
+    container_name: telegraf
+    image: docker.io/library/telegraf:1.34
+    restart: unless-stopped
+    network_mode: host
+    environment:
+      - HOST_ETC=/hostfs/etc
+      - HOST_PROC=/hostfs/proc
+      - HOST_SYS=/hostfs/sys
+      - HOST_VAR=/hostfs/var
+      - HOST_RUN=/hostfs/run
+      - HOST_MOUNT_PREFIX=/hostfs
+    group_add:
+      - 994  # docker group id for /var/run/docker.sock access
+    volumes:
+      - ./telegraf.conf:/etc/telegraf/telegraf.conf:ro
+      - /var/run/docker.sock:/hostfs/var/run/docker.sock:ro
+      - /proc:/hostfs/proc:ro
+      - /sys:/hostfs/sys:ro
+      - /:/hostfs:ro

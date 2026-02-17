@@ -1,0 +1,19 @@
+[Unit]
+Description=Inkbird IAM-T1 CO2 Sensor Monitor
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+ExecStart=/usr/local/bin/inkbird-monitor
+Restart=always
+RestartSec=10
+User=nobody
+Group=nogroup
+
+# BLE access
+AmbientCapabilities=CAP_NET_RAW CAP_NET_ADMIN
+CapabilityBoundingSet=CAP_NET_RAW CAP_NET_ADMIN
+
+[Install]
+WantedBy=multi-user.target
