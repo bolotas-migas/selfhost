@@ -1,0 +1,35 @@
+services:
+  mosquitto:
+    container_name: mosquitto
+    image: docker.io/eclipse-mosquitto:2
+    restart: unless-stopped
+    network_mode: host
+    ports:
+      - "1883:1883"
+    volumes:
+      - ./mosquitto:/etc/mosquitto
+      - ./mosquitto/mosquitto.conf:/mosquitto/config/mosquitto.conf
+    user: nobody
+
+  zigbee2mqtt:
+    container_name: zigbee2mqtt
+    image: ghcr.io/koenkk/zigbee2mqtt:latest
+    restart: unless-stopped
+    network_mode: host
+    volumes:
+      - /media/simple/zigbee2mqtt:/app/data
+      - /run/udev:/run/udev:ro
+    ports:
+      - 8080:8080
+    environment:
+      - TZ=UTC
+    group_add:
+      - dialout
+    user: nobody
+    devices:
+      # Update this to match your adapter
+      - /dev/serial/by-id/usb-Texas_Instruments_TI_CC2531_USB_CDC___0X00124B001CCBE653-if00:/dev/ttyACM0
+    # TODO: Update device path for your Zigbee adapter
+
+# TODO: Add Home Assistant when ready
+# TODO: Add kostal2influx (solar inverter metrics)

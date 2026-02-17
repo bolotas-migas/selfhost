@@ -1,0 +1,51 @@
+services:
+  victoriametrics:
+    image: victoriametrics/victoria-metrics:v1.133.0
+    container_name: victoriametrics
+    command:
+      - '-memory.allowedBytes=4GiB'
+      - '-retentionPeriod=10y'
+      - '-influxListenAddr=:8089'
+    ports:
+      - 8428:8428
+      - 8089:8089
+      - 8089:8089/udp
+    restart: unless-stopped
+    volumes:
+      - /media/simple/victoriametrics:/victoria-metrics-data
+    networks:
+      - monitoring
+
+  influxdb:
+    image: quay.io/influxdb/influxdb:2.1.1
+    container_name: influxdb
+    volumes:
+      - /media/simple/influxdb:/root/.influxdbv2
+    ports:
+      - 8086:8086
+      - 8083:8083
+    networks:
+      - monitoring
+    restart: unless-stopped
+    # TODO: Migrate kostal2influx to VictoriaMetrics, then consider removing InfluxDB
+
+  grafana:
+    image: grafana/grafana-oss:10.4.1
+    container_name: grafana
+    ports:
+      - 3000:3000
+    restart: unless-stopped
+    environment:
+      - GF_SECURITY_ADMIN_USER=msf
+      - GF_SECURITY_ADMIN_PASSWORD=${GRAFANA_PASSWORD}
+    volumes:
+      - /media/simple/grafana/data:/var/lib/grafana
+      - /media/simple/grafana/provisioning/dashboards:/etc/grafana/provisioning/dashboards
+      - /media/simple/grafana/provisioning/datasources:/etc/grafana/provisioning/datasources
+    networks:
+      - monitoring
+    # TODO: After strong password set, expose as graf.mfilipe.eu via Caddy
+
+networks:
+  monitoring:
+    name: monitoring

@@ -1,0 +1,3 @@
+# Generate password file with:
+# mosquitto_passwd -c pwfile username
+# Then copy to pwfile (not in git)
